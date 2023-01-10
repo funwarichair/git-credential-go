@@ -1,4 +1,4 @@
-package git_credential_test
+package gitcredential_test
 
 import (
 	"reflect"

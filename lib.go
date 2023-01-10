@@ -1,4 +1,4 @@
-package git_credential
+package gitcredential
 
 import (
 	"bufio"
