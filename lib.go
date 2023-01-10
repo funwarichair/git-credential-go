@@ -131,7 +131,7 @@ func Parse(reader io.Reader) (cred *GitCrendential, err error) {
 		}
 
 		// A line must contain "="
-		if strings.Index(line, "=") == -1 {
+		if !strings.Contains(line, "=") {
 			return nil, errors.New("invalid line")
 		}
 
