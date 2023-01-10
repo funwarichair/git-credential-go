@@ -2,18 +2,14 @@ package gitcredential_test
 
 import (
 	"reflect"
-	"strings"
 	"testing"
 
 	. "github.com/funwarichair/git-credential-go"
+	util "github.com/funwarichair/git-credential-go/util"
 )
 
 func intoPtr(base string) *string {
 	return &base
-}
-
-func parseString(input string) (*GitCrendential, error) {
-	return Parse(strings.NewReader(input))
 }
 
 func TestParse(t *testing.T) {
@@ -191,7 +187,7 @@ func TestParse(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			actual, err := parseString(test.input)
+			actual, err := util.FromString(test.input)
 			if err != nil {
 				t.Errorf("unexpecred error: %s", err.Error())
 			}
@@ -232,7 +228,7 @@ func TestParseError(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			_, err := parseString(test.input)
+			_, err := util.FromString(test.input)
 			if err == nil {
 				t.Fatalf("error is expected but didn't get")
 			}
@@ -329,7 +325,7 @@ func TestString(t *testing.T) {
 
 	for _, test := range testCases {
 		t.Run(test.name, func(t *testing.T) {
-			actual := test.input.String()
+			actual := util.ToString(&test.input)
 			if test.expected != actual {
 				t.Fatalf("%#v is expected but got %#v", test.expected, actual)
 			}

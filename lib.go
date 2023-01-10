@@ -2,7 +2,6 @@ package gitcredential
 
 import (
 	"bufio"
-	"bytes"
 	"errors"
 	"fmt"
 	"io"
@@ -144,30 +143,49 @@ func Parse(reader io.Reader) (cred *GitCrendential, err error) {
 	return cred, nil
 }
 
-func (g GitCrendential) String() string {
-	var buf bytes.Buffer // bytes.Buffer.Write always returns (length of p, nil).
+func (g *GitCrendential) Write(writer io.Writer) (err error) {
+	// Write must return a non-nil error if it returns n < len(p).
+	// So conversely the error being nil implies n == len(p).
 
 	if g.Protocol != nil {
-		fmt.Fprintf(&buf, "protocol=%s\n", *g.Protocol)
+		_, err = fmt.Fprintf(writer, "protocol=%s\n", *g.Protocol)
+		if err != nil {
+			return
+		}
 	}
 
 	if g.Host != nil {
-		fmt.Fprintf(&buf, "host=%s\n", *g.Host)
+		_, err = fmt.Fprintf(writer, "host=%s\n", *g.Host)
+		if err != nil {
+			return
+		}
 	}
 
 	if g.Path != nil {
-		fmt.Fprintf(&buf, "path=%s\n", *g.Path)
+		_, err = fmt.Fprintf(writer, "path=%s\n", *g.Path)
+		if err != nil {
+			return
+		}
 	}
 
 	if g.Username != nil {
-		fmt.Fprintf(&buf, "username=%s\n", *g.Username)
+		_, err = fmt.Fprintf(writer, "username=%s\n", *g.Username)
+		if err != nil {
+			return
+		}
 	}
 
 	if g.Password != nil {
-		fmt.Fprintf(&buf, "password=%s\n", *g.Password)
+		_, err = fmt.Fprintf(writer, "password=%s\n", *g.Password)
+		if err != nil {
+			return
+		}
 	}
 
-	fmt.Fprintf(&buf, "\n")
+	_, err = fmt.Fprintf(writer, "\n")
+	if err != nil {
+		return
+	}
 
-	return buf.String()
+	return
 }
