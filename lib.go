@@ -145,29 +145,29 @@ func Parse(reader io.Reader) (cred *GitCrendential, err error) {
 }
 
 func (g GitCrendential) String() string {
-	var buf bytes.Buffer
+	var buf bytes.Buffer // bytes.Buffer.Write always returns (length of p, nil).
 
 	if g.Protocol != nil {
-		buf.WriteString(fmt.Sprintf("protocol=%s\n", *g.Protocol))
+		fmt.Fprintf(&buf, "protocol=%s\n", *g.Protocol)
 	}
 
 	if g.Host != nil {
-		buf.WriteString(fmt.Sprintf("host=%s\n", *g.Host))
+		fmt.Fprintf(&buf, "host=%s\n", *g.Host)
 	}
 
 	if g.Path != nil {
-		buf.WriteString(fmt.Sprintf("path=%s\n", *g.Path))
+		fmt.Fprintf(&buf, "path=%s\n", *g.Path)
 	}
 
 	if g.Username != nil {
-		buf.WriteString(fmt.Sprintf("username=%s\n", *g.Username))
+		fmt.Fprintf(&buf, "username=%s\n", *g.Username)
 	}
 
 	if g.Password != nil {
-		buf.WriteString(fmt.Sprintf("password=%s\n", *g.Password))
+		fmt.Fprintf(&buf, "password=%s\n", *g.Password)
 	}
 
-	buf.WriteString("\n")
+	fmt.Fprintf(&buf, "\n")
 
 	return buf.String()
 }
